@@ -1,63 +1,51 @@
-let buttons = document.querySelectorAll('.slider__arrow');
-slides = Array.from(document.querySelectorAll('.slider__item'))
-slidesCount = slides.length
-let dots = document.querySelectorAll('.slider__dot');
+const arrows = document.getElementsByClassName("slider__arrow");
+const dots = Array.from(document.getElementsByClassName("slider__dot"));
+const slides = Array.from(document.getElementsByClassName("slider__item"));
+let numOfSlide = 0;
+dots[numOfSlide].className += " slider__dot_active";
 
-function showSlides(direction) {
-    
-    activeIndex = slides.findIndex((elem) => {
-      if (elem.classList.contains('slider__item_active') == true) {
-        return true
-      }
-    });
-    console.log(activeIndex);
-    let nextIndex
-    if (direction == 1) {
-      if (activeIndex == slidesCount - 1) {
-        nextIndex = 0;
-        } else {
-          nextIndex = activeIndex + 1;
-        }
-        
-    } else {
-      if (activeIndex == 0) {
-        nextIndex = slidesCount - 1;
-        } else {
-          nextIndex = activeIndex - 1;
-        } 
-    }
-      slides[activeIndex].classList.remove('slider__item_active');
-      slides[nextIndex].classList.add('slider__item_active');
-      dots[activeIndex].classList.remove('slider__dot_active');
-      dots[nextIndex].classList.add('slider__dot_active');
-      console.log(nextIndex);
-    }
+let deactivate = function (number) {
+  let active = slides[number];
+  if (active) {
+    active.className = "slider__item";
+  }
+  let dot = dots[number];
+  if (dot) {
+    dot.className = "slider__dot";
+  }
+};
 
-      buttons.forEach((elem, index) => {
-        elem.addEventListener('click', () => {
-          showSlides(index)   
-    })
-})
+let activate = function (number) {
+  if (number > slides.length - 1) {
+    numOfSlide = 0;
+    slides[numOfSlide].className += " slider__item_active";
+    dots[numOfSlide].className += " slider__dot_active";
+  }
+  if (number < 0) {
+    numOfSlide = slides.length - 1;
+    slides[numOfSlide].className += " slider__item_active";
+    dots[numOfSlide].className += " slider__dot_active";
+  }
+  slides[number].className += " slider__item_active";
+  dots[number].className += " slider__dot_active";
+};
 
-dots.forEach((elem, index) => {
-  elem.addEventListener('click', () => {
-    showDot(index)   
-    })
-})
+arrows.item(1).onclick = function () {
+  deactivate(numOfSlide);
+  numOfSlide++;
+  activate(numOfSlide);
+};
 
-function showDot(index) {
-  slides.forEach((elem, i) => {
-    if (index == i) {
-      elem.classList.add('slider__item_active'); 
-      } else {
-        elem.classList.remove('slider__item_active');
-      }
-    })
-    dots.forEach((elem, i) => {
-      if (index == i) {
-        elem.classList.add('slider__dot_active'); 
-        } else {
-          elem.classList.remove('slider__dot_active');
-        }
-    })
+arrows.item(0).onclick = function () {
+  deactivate(numOfSlide);
+  numOfSlide--;
+  activate(numOfSlide);
+};
+
+for (let item in dots) {
+  dots[item].onclick = function () {
+    deactivate(numOfSlide);
+    numOfSlide = item;
+    activate(numOfSlide);
+  };
 }
