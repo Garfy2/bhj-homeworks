@@ -1,18 +1,24 @@
-function killer(hole) {
-    return () => {
-        let x = document.getElementById("dead").textContent;
-        let y = document.getElementById("lost").textContent;
-        let moleInLink = hole.className.includes('hole_has-mole');
-        if (moleInLink) {
-            x++;
-        } else {
-            y++;
-        }
-        document.getElementById("dead").textContent = x;
-        document.getElementById("lost").textContent = y;
-    }
-}
-for (let i = 1; i <= 9; i++) {
-    let hole = document.getElementById(`hole${i}`);
-    hole.onclick = killer(hole);
+for (let index = 1; index < 10; index++) { 
+    let dead = document.getElementById("dead");
+    let lost = document.getElementById("lost");
+    const getHole = index => document.getElementById(`hole${index}`);
+
+    getHole(index).onclick = () => {
+    if (getHole(index).className.includes('hole_has-mole')) {
+      dead.textContent++;
+    } else lost.textContent++;    
+    
+  function clear() {
+    dead.textContent = 0;
+    lost.textContent = 0;
+  }    
+  if (dead.textContent >= 10) {
+    alert('Вы победили');
+    clear()
+  } 
+    if (lost.textContent >= 5) {
+    alert('Вы проиграли');
+    clear()
+   }
+  }
 }
